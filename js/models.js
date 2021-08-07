@@ -80,7 +80,10 @@ class StoryList {
       method: 'POST',
       data: { token, story: { title, author, url } },
     })
-    return new Story(response.data.story)
+    // return new Story(response.data.story)
+    const newStory = new Story(response.data.story)
+    this.stories.unshift(newStory)
+    return newStory
   }
 }
 
