@@ -10,6 +10,8 @@ function navAllStories(evt) {
   console.debug('navAllStories', evt)
   hidePageComponents()
   putStoriesOnPage()
+  const addStoryForm = document.getElementById('add-story-form')
+  addStoryForm.classList.add('hidden')
 }
 
 $body.on('click', '#nav-all', navAllStories)
@@ -37,15 +39,15 @@ function updateNavOnLogin() {
   $navUserProfile.text(`${currentUser.username}`).show()
   const navSubmitStory = document.getElementById('nav-submit-story')
   const addStoryForm = document.getElementById('add-story-form')
-  navSubmitStory.classList.toggle('hidden')
+  navSubmitStory.classList.remove('hidden')
+  addStoryForm.classList.add('hidden')
 }
 navSubmitStory.addEventListener('click', navSubmitClick)
 /** Show add story form on click "submit". */
 
 function navSubmitClick(evt) {
-  console.log('CLICKED', evt)
   console.debug('navSubmitClick')
   hidePageComponents()
   const addStoryForm = document.getElementById('add-story-form')
-  addStoryForm.classList.toggle('hidden')
+  addStoryForm.classList.remove('hidden')
 }

@@ -50,3 +50,21 @@ function putStoriesOnPage() {
 
   $allStoriesList.show()
 }
+
+async function addStory(evt) {
+  console.debug('addStory')
+  evt.preventDefault()
+
+  // grab the title and url
+  const title = document.getElementById('add-story-title').value
+  const author = document.getElementById('add-story-author').value
+  const url = document.getElementById('add-story-url').value
+
+  const username = currentUser.username
+  const token = currentUser.loginToken
+
+  const newAddNewStoy = await storyList.Story({
+    token,
+    story: { title, author, url },
+  })
+}
