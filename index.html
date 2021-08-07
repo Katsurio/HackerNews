@@ -37,6 +37,9 @@
         <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
       </div>
       <div class="nav-right">
+        <a class="nav-link hidden" id="nav-submit-story" href="#">
+          Submit
+        </a>
         <a class="nav-link" href="#" id="nav-login">login/signup</a>
         <a class="nav-link" href="#" id="nav-user-profile"></a>
         <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
@@ -103,6 +106,25 @@
           />
         </div>
         <button type="submit">create account</button>
+      </form>
+
+      <!-- Add Story form -->
+      <form
+        action="#"
+        id="add-story-form"
+        class="add-story-form hidden"
+        method="post"
+      >
+        <h4>Add Story</h4>
+        <div class="title-input">
+          <label for="add-story-title">title</label>
+          <input id="add-story-title" autocapitalize="words" />
+        </div>
+        <div class="login-input">
+          <label for="add-story-url">url</label>
+          <input id="add-story-url" type="url" />
+        </div>
+        <button type="submit">Add Story</button>
       </form>
     </section>
 
