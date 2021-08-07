@@ -42,12 +42,14 @@ function updateNavOnLogin() {
   navSubmitStory.classList.remove('hidden')
   addStoryForm.classList.add('hidden')
 }
-navSubmitStory.addEventListener('click', navSubmitClick)
+
 /** Show add story form on click "submit". */
 
 function navSubmitClick(evt) {
   console.debug('navSubmitClick')
   hidePageComponents()
+  $allStoriesList.show()
   const addStoryForm = document.getElementById('add-story-form')
   addStoryForm.classList.remove('hidden')
 }
+navSubmitStory.addEventListener('click', navSubmitClick)

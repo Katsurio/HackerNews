@@ -26,7 +26,6 @@ const addStoryForm = document.getElementById('add-story-form')
 function hidePageComponents() {
   const components = [$allStoriesList, $loginForm, $signupForm]
   components.forEach((c) => c.hide())
-  // navSubmitStory.classList.toggle('hidden')
 }
 
 /** Overall function to kick off the app. */
