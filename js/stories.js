@@ -50,3 +50,30 @@ function putStoriesOnPage() {
 
   $allStoriesList.show()
 }
+
+async function submitStoryForm(evt) {
+  console.debug('submitStoryForm')
+  evt.preventDefault()
+
+  // grab the title and url
+
+  const title = document.getElementById('add-story-title').value
+  const author = document.getElementById('add-story-author').value
+  const url = document.getElementById('add-story-url').value
+  const username = currentUser.username
+
+  const newStory = await storyList.addStory(currentUser, {
+    title,
+    author,
+    url,
+    username,
+  })
+
+  const $newStory = generateStoryMarkup(newStory)
+
+  $allStoriesList.prepend($newStory)
+
+  addStoryForm.classList.add('hidden')
+  addStoryForm.reset()
+}
+addStoryForm.addEventListener('submit', submitStoryForm)
