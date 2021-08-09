@@ -93,32 +93,46 @@ addStoryForm.addEventListener('submit', submitStoryForm)
  * - shows a nav link to their favorited stories
  */
 async function toggleFavoriteStories(evt) {
+  // debugger
   evt.preventDefault
-  const favStoryId = evt.target.id
-  const token = currentUser.loginToken
-  // Check if story is favorited, return POST or DELETE
-  const postOrDelete = checkFavoriteClass(evt.target)
-  console.log(postOrDelete)
+  const clickedEleTagName = evt.target.tagName
+  if (clickedEleTagName !== 'I') return
+
+  const liStoryId = evt.target.parentElement.parentElement.id
+  // Check and update fa-icon class, thenreturn POST or DELETE
+  const postOrDelete = checkFontIconClass(evt.target)
   // If not favorited, POST/save; else, DELETE
   const result = await User.toggleUserFavStory(
     postOrDelete,
     currentUser.username,
-    favStoryId,
-    token,
+    liStoryId,
+    currentUser.loginToken,
   )
 
-  console.log(result)
-  console.log(currentUser.favorites)
+  // console.log(result)
+  // console.log(currentUser.favorites)
 }
-const storyToFavorite = document.getElementById('all-stories-list')
-storyToFavorite.addEventListener('click', toggleFavoriteStories)
 
-function checkFavoriteClass(element) {
-  if (!element.classList.contains('favorite')) {
-    element.classList.add('favorite')
+// const storyToFavorite = document
+//   .querySelectorAll('.fa-star')
+//   .forEach((star) => {
+//     star.addEventListener('click', toggleFavoriteStories)
+//   })
+// storyToFavorite.addEventListener('click', )
+
+// const storiesToFavorite = document.getElementsByClassName('star')
+// Array.from(storiesToFavorite).forEach(function (story) {
+//   story.addEventListener('click', toggleFavoriteStories)
+// })
+
+function checkFontIconClass(element) {
+  if (!element.classList.contains('fas')) {
+    element.classList.remove('far')
+    element.classList.add('fas')
     return 'POST'
   } else {
-    element.classList.remove('favorite')
+    element.classList.remove('fas')
+    element.classList.add('far')
     return 'DELETE'
   }
   saveFavStoriesInLocalStorage(currentUser)
@@ -136,3 +150,7 @@ function saveFavStoriesInLocalStorage(curUser) {
     localStorage.setItem('favorites', curUser.user.favorites)
   }
 }
+
+const story = document
+  .getElementById('all-stories-list')
+  .addEventListener('click', toggleFavoriteStories)
