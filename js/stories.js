@@ -89,50 +89,36 @@ addStoryForm.addEventListener('submit', submitStoryForm)
  * - allows logged in users to see a separate list of favorited stories
  * - shows a nav link to their favorited stories
  */
-async function addStoryToFavorites(evt) {
+async function toggleFavoriteStories(evt) {
   evt.preventDefault
   const favStoryId = evt.target.id
   const token = currentUser.loginToken
-  const result = await User.addUserFavStory(
+  // Check if story is favorited, return POST or DELETE
+  const postOrDelete = checkFavoriteClass(evt.target)
+  console.log(postOrDelete)
+  // If not favorited, POST/save; else, DELETE
+  const result = await User.toggleUserFavStory(
+    postOrDelete,
     currentUser.username,
     favStoryId,
     token,
   )
 
-  // grab id of target
-  // push id to favorites array of ids
-  // make call to get all the story data for the ids' stories
-  // post stories on page
-
-  // let favoriteStories = [] // push to the favorite stories on the currentUser objecy
-  // const favorite = evt.target
-  // get the story object and add it to the favoriteStories
-}
-const storyToFavorite = document.getElementById('all-stories-list')
-// storyToFavorite.addEventListener('click', addStoryToFavorites)
-
-/** When a user clicks a favorite button on a story, it either saves or removes the story:
- *
- * - saves the story to a list of favorite stories
- * - saves the list of favorite stories to local storage for page refreshes
- * - allows logged in users to see a separate list of favorited stories
- * - shows a nav link to their favorited stories
- */
-async function removeStoryFromFavorites(evt) {
-  evt.preventDefault
-  const favStoryId = evt.target.id
-  const token = currentUser.loginToken
-  const result = await User.removeUserFavStory(
-    currentUser.username,
-    favStoryId,
-    token,
-  )
   console.log(result)
   console.log(currentUser.favorites)
 }
-storyToFavorite.addEventListener('click', removeStoryFromFavorites)
-// TODO: THESE 2 SHOULD BE CHANGED TO A TOGGLE FUNCTION WITH AN IF STATEMENT
+const storyToFavorite = document.getElementById('all-stories-list')
+storyToFavorite.addEventListener('click', toggleFavoriteStories)
 
+function checkFavoriteClass(element) {
+  if (!element.classList.contains('favorite')) {
+    element.classList.add('favorite')
+    return 'POST'
+  } else {
+    element.classList.remove('favorite')
+    return 'DELETE'
+  }
+}
 /** Sync current user's favortie stories to localStorage.
  *
  * We store the favorite stories in localStorage so when the page is refreshed
