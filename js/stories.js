@@ -99,7 +99,7 @@ async function toggleFavoriteStories(evt) {
   if (clickedEleTagName !== 'I') return
 
   const liStoryId = evt.target.parentElement.parentElement.id
-  // Check and update fa-icon class, thenreturn POST or DELETE
+  // Check and update fa-icon class, then return POST or DELETE
   const postOrDelete = checkFontIconClass(evt.target)
   // If not favorited, POST/save; else, DELETE
   const result = await User.toggleUserFavStory(
@@ -109,22 +109,12 @@ async function toggleFavoriteStories(evt) {
     currentUser.loginToken,
   )
 
-  // console.log(result)
-  // console.log(currentUser.favorites)
+  // TODO: add this somewhere to save favorites to localstorage
+  // saveFavStoriesInLocalStorage(currentUser)
 }
 
-// const storyToFavorite = document
-//   .querySelectorAll('.fa-star')
-//   .forEach((star) => {
-//     star.addEventListener('click', toggleFavoriteStories)
-//   })
-// storyToFavorite.addEventListener('click', )
-
-// const storiesToFavorite = document.getElementsByClassName('star')
-// Array.from(storiesToFavorite).forEach(function (story) {
-//   story.addEventListener('click', toggleFavoriteStories)
-// })
-
+/** Check and update fa-icon class, then return POST or DELETE.
+ */
 function checkFontIconClass(element) {
   if (!element.classList.contains('fas')) {
     element.classList.remove('far')
@@ -135,7 +125,6 @@ function checkFontIconClass(element) {
     element.classList.add('far')
     return 'DELETE'
   }
-  saveFavStoriesInLocalStorage(currentUser)
 }
 
 /** Sync current user's favortie stories to localStorage.
