@@ -77,3 +77,59 @@ async function submitStoryForm(evt) {
   addStoryForm.reset()
 }
 addStoryForm.addEventListener('submit', submitStoryForm)
+
+/******************************************************************************
+ * Favoriting stories for logged in users
+ */
+
+/** When a user clicks a favorite button on a story, it either saves or removes the story:
+ *
+ * - saves the story to a list of favorite stories
+ * - saves the list of favorite stories to local storage for page refreshes
+ * - allows logged in users to see a separate list of favorited stories
+ * - shows a nav link to their favorited stories
+ */
+async function toggleFavoriteStories(evt) {
+  evt.preventDefault
+  const favStoryId = evt.target.id
+  const token = currentUser.loginToken
+  // Check if story is favorited, return POST or DELETE
+  const postOrDelete = checkFavoriteClass(evt.target)
+  console.log(postOrDelete)
+  // If not favorited, POST/save; else, DELETE
+  const result = await User.toggleUserFavStory(
+    postOrDelete,
+    currentUser.username,
+    favStoryId,
+    token,
+  )
+
+  console.log(result)
+  console.log(currentUser.favorites)
+}
+const storyToFavorite = document.getElementById('all-stories-list')
+storyToFavorite.addEventListener('click', toggleFavoriteStories)
+
+function checkFavoriteClass(element) {
+  if (!element.classList.contains('favorite')) {
+    element.classList.add('favorite')
+    return 'POST'
+  } else {
+    element.classList.remove('favorite')
+    return 'DELETE'
+  }
+  saveFavStoriesInLocalStorage()
+}
+
+/** Sync current user's favortie stories to localStorage.
+ *
+ * We store the favorite stories in localStorage so when the page is refreshed
+ * (or the user revisits the site later), they will still see them.
+ */
+
+function saveFavStoriesInLocalStorage() {
+  console.debug('saveFavStoriesInLocalStorage')
+  if (currentUser) {
+    localStorage.setItem('favorites', currentUser.user.favorites)
+  }
+}

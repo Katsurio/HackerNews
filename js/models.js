@@ -197,4 +197,26 @@ class User {
       return null
     }
   }
+
+  /** Save favorite story for logged in user.
+
+   * - username: an existing user's username
+   * - storyId: a story's id
+   * - userToken: an existing user's token
+   */
+  static async toggleUserFavStory(postOrDelete, username, storyId, userToken) {
+    try {
+      const response = await axios({
+        url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+        method: `${postOrDelete}`,
+        data: { token: userToken },
+      })
+
+      let { user } = response.data
+      return user
+    } catch (err) {
+      console.error('addUserFavStory', err)
+      return null
+    }
+  }
 }
