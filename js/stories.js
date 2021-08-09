@@ -118,7 +118,7 @@ function checkFavoriteClass(element) {
     element.classList.remove('favorite')
     return 'DELETE'
   }
-  saveFavStoriesInLocalStorage()
+  saveFavStoriesInLocalStorage(currentUser)
 }
 
 /** Sync current user's favortie stories to localStorage.
@@ -127,9 +127,9 @@ function checkFavoriteClass(element) {
  * (or the user revisits the site later), they will still see them.
  */
 
-function saveFavStoriesInLocalStorage() {
+function saveFavStoriesInLocalStorage(user) {
   console.debug('saveFavStoriesInLocalStorage')
   if (currentUser) {
-    localStorage.setItem('favorites', currentUser.user.favorites)
+    localStorage.setItem('favorites', user.user.favorites)
   }
 }
