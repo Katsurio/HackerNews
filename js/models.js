@@ -197,4 +197,25 @@ class User {
       return null
     }
   }
+
+  /** Favorite story for logged in user.
+
+   * - username: an existing user's username
+   * - password: an existing user's password
+   */
+  static async addUserFavStory(username, storyId, userToken) {
+    try {
+      const response = await axios({
+        url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+        method: 'POST',
+        data: { token: userToken },
+      })
+
+      let { user } = response.data
+      return user
+    } catch (err) {
+      console.error('addUserFavStory', err)
+      return null
+    }
+  }
 }

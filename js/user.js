@@ -114,23 +114,3 @@ function updateUIOnUserLogin() {
 
   updateNavOnLogin()
 }
-
-/******************************************************************************
- * Favoriting stories for logged in users
- */
-
-/** When a user clicks a favorite button on a story, it either saves or removes the story:
- *
- * - saves the story to a list of favorite stories
- * - saves the list of favorite stories to local storage for page refreshes
- * - allows logged in users to see a separate list of favorited stories
- * - shows a nav link to their favorited stories
- */
-function addStoryToFavorites(evt) {
-  console.debug('addStoryToFavorites')
-  evt.preventDefault
-
-  let favoriteStories = []
-  const favorite = evt.target
-  // get the story object and add it to the favoriteStories
-}
