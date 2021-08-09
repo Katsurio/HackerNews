@@ -109,7 +109,29 @@ async function addStoryToFavorites(evt) {
   // get the story object and add it to the favoriteStories
 }
 const storyToFavorite = document.getElementById('all-stories-list')
-storyToFavorite.addEventListener('click', addStoryToFavorites)
+// storyToFavorite.addEventListener('click', addStoryToFavorites)
+
+/** When a user clicks a favorite button on a story, it either saves or removes the story:
+ *
+ * - saves the story to a list of favorite stories
+ * - saves the list of favorite stories to local storage for page refreshes
+ * - allows logged in users to see a separate list of favorited stories
+ * - shows a nav link to their favorited stories
+ */
+async function removeStoryFromFavorites(evt) {
+  evt.preventDefault
+  const favStoryId = evt.target.id
+  const token = currentUser.loginToken
+  const result = await User.removeUserFavStory(
+    currentUser.username,
+    favStoryId,
+    token,
+  )
+  console.log(result)
+  console.log(currentUser.favorites)
+}
+storyToFavorite.addEventListener('click', removeStoryFromFavorites)
+// TODO: THESE 2 SHOULD BE CHANGED TO A TOGGLE FUNCTION WITH AN IF STATEMENT
 
 /** Sync current user's favortie stories to localStorage.
  *

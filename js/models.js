@@ -198,10 +198,11 @@ class User {
     }
   }
 
-  /** Favorite story for logged in user.
+  /** Save favorite story for logged in user.
 
    * - username: an existing user's username
-   * - password: an existing user's password
+   * - storyId: a story's id
+   * - userToken: an existing user's token
    */
   static async addUserFavStory(username, storyId, userToken) {
     try {
@@ -215,6 +216,29 @@ class User {
       return user
     } catch (err) {
       console.error('addUserFavStory', err)
+      return null
+    }
+  }
+
+  /** Remove favorite story for logged in user.
+
+   * - username: an existing user's username
+   * - storyId: a story's id
+   * - userToken: an existing user's token
+   */
+  static async removeUserFavStory(username, storyId, userToken) {
+    try {
+      const response = await axios({
+        url: `${BASE_URL}/users/${username}/favorites/${storyId}`,
+        method: 'DELETE',
+        data: { token: userToken },
+      })
+
+      let { user, message } = response.data
+      console.log(message)
+      return user
+    } catch (err) {
+      console.error('removeUserFavStory', err)
       return null
     }
   }
