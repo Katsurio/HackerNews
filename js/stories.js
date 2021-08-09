@@ -127,9 +127,9 @@ function checkFavoriteClass(element) {
  * (or the user revisits the site later), they will still see them.
  */
 
-function saveFavStoriesInLocalStorage(user) {
+function saveFavStoriesInLocalStorage(curUser) {
   console.debug('saveFavStoriesInLocalStorage')
   if (currentUser) {
-    localStorage.setItem('favorites', user.user.favorites)
+    localStorage.setItem('favorites', curUser.user.favorites)
   }
 }
