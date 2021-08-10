@@ -217,12 +217,3 @@ function putFavStoriesOnPage() {
 
   $allStoriesList.show()
 }
-
-/** Get and show stories when site first loads. */
-
-async function getAndShowFavStories() {
-  storyList = await StoryList.getStories()
-  $storiesLoadingMsg.remove()
-
-  putStoriesOnPage()
-}
