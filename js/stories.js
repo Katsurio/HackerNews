@@ -40,21 +40,21 @@ function generateStoryMarkup(story) {
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
-// function putStoriesOnPage() {
-//   console.debug('putStoriesOnPage')
-
-//   $allStoriesList.empty()
-
-//   // loop through all of our stories and generate HTML for them
-//   for (let story of storyList.stories) {
-//     const $story = generateStoryMarkup(story)
-//     $allStoriesList.append($story)
-//   }
-
-//   $allStoriesList.show()
-// }
-
 function putStoriesOnPage() {
+  console.debug('putStoriesOnPage')
+
+  $allStoriesList.empty()
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of storyList.stories) {
+    const $story = generateStoryMarkup(story)
+    $allStoriesList.append($story)
+  }
+
+  $allStoriesList.show()
+}
+
+function putStoriesOnPageAfterLogin() {
   console.debug('putStoriesOnPage')
   let favStories = favStoriesList()
   $allStoriesList.empty()
