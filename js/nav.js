@@ -9,7 +9,7 @@
 function navAllStories(evt) {
   console.debug('navAllStories', evt)
   hidePageComponents()
-  putStoriesOnPage()
+  currentUser ? putStoriesOnPageAfterLogin() : putStoriesOnPage()
   addStoryForm.classList.add('hidden')
 }
 
