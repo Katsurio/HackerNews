@@ -108,9 +108,32 @@ async function toggleFavoriteStories(evt) {
     liStoryId,
     currentUser.loginToken,
   )
+  // console.log(storyList.stories)
+  let fas = favStoriesList()
+  console.log(fas)
+  // console.log(result)
+  // debugger
 
-  // TODO: add this somewhere to save favorites to localstorage
-  // saveFavStoriesInLocalStorage(currentUser)
+  // const { favorites } = result
+  // console.log(favorites)
+  // if (!favorites) return
+
+  // const newFav = new Story(favorites[favorites.length - 1])
+  // console.log(newFav)
+  // localStorage.setItem('favorites', newFav)
+  // debugger
+  // localStorage.removeItem('favorites')
+  // favs.forEach((story) => {
+  //   console.log(new Story(story))
+  //   const newStory = new Story(story)
+  //   localStorage.favorites.push(newStory)
+  //   // console.log(story)
+  //   // saveFavStoryInLocalStorage(new Story(story))
+  // })
+  // console.log(localStorage.getItem('favorites'))
+  // // TODO: add this somewhere to save favorites to localstorage
+  // // saveFavStoriesInLocalStorage(result.favorites)
+  // // console.log(...localStorage.getItem('favorites'))
 }
 
 /** Check and update fa-icon class, then return POST or DELETE.
@@ -133,13 +156,64 @@ function checkFontIconClass(element) {
  * (or the user revisits the site later), they will still see them.
  */
 
-function saveFavStoriesInLocalStorage(curUser) {
-  console.debug('saveFavStoriesInLocalStorage')
+function saveFavStoryInLocalStorage(fav) {
+  console.debug('saveFavStoryInLocalStorage')
   if (currentUser) {
-    localStorage.setItem('favorites', curUser.user.favorites)
+    localStorage.setItem('favorites', fav)
+    // localStorage.getItem(...'favorites').forEach((story) => {
+    //   console.log(story.storyId)
+    // })
   }
 }
 
 const story = document
   .getElementById('all-stories-list')
   .addEventListener('click', toggleFavoriteStories)
+
+/**
+ * A render method to render HTML for an individual Story instance
+ * - story: an instance of Story
+ *
+ * Returns the markup for the story.
+ */
+
+// Get list of favorite stories from filtering storyList and favorites
+let favStoriesList = () =>
+  storyList.stories.filter((story1) =>
+    currentUser.favorites.some((story2) => story1.storyId === story2.storyId),
+  )
+
+function generateFavStoryMarkup(story) {
+  console.debug('generateFavStoryMarkup', story)
+
+  const hostName = story.getHostName()
+  return $(`
+      <li id="${story.storyId}">
+        <span class="star">
+          <i class="fas fa-star"></i>
+        </span>
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+      </li>
+    `)
+}
+
+/** Gets list of stories from server, generates their HTML, and puts on page. */
+
+function putFavStoriesOnPage() {
+  console.debug('putFavStoriesOnPage')
+
+  $allStoriesList.empty()
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of storyList.stories) {
+    const $story = generateStoryMarkup(story)
+    $allStoriesList.append($story)
+  }
+
+  $allStoriesList.show()
+}
