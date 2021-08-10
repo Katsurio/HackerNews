@@ -40,14 +40,32 @@ function generateStoryMarkup(story) {
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
+// function putStoriesOnPage() {
+//   console.debug('putStoriesOnPage')
+
+//   $allStoriesList.empty()
+
+//   // loop through all of our stories and generate HTML for them
+//   for (let story of storyList.stories) {
+//     const $story = generateStoryMarkup(story)
+//     $allStoriesList.append($story)
+//   }
+
+//   $allStoriesList.show()
+// }
+
 function putStoriesOnPage() {
   console.debug('putStoriesOnPage')
-
+  let favStories = favStoriesList()
   $allStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
-    const $story = generateStoryMarkup(story)
+    // Check if story is in favStories to show fav story icon
+    const $story =
+      $.inArray(story, favStories) === -1
+        ? generateStoryMarkup(story)
+        : generateFavStoryMarkup(story)
     $allStoriesList.append($story)
   }
 
@@ -108,32 +126,6 @@ async function toggleFavoriteStories(evt) {
     liStoryId,
     currentUser.loginToken,
   )
-  // console.log(storyList.stories)
-  let fas = favStoriesList()
-  console.log(fas)
-  // console.log(result)
-  // debugger
-
-  // const { favorites } = result
-  // console.log(favorites)
-  // if (!favorites) return
-
-  // const newFav = new Story(favorites[favorites.length - 1])
-  // console.log(newFav)
-  // localStorage.setItem('favorites', newFav)
-  // debugger
-  // localStorage.removeItem('favorites')
-  // favs.forEach((story) => {
-  //   console.log(new Story(story))
-  //   const newStory = new Story(story)
-  //   localStorage.favorites.push(newStory)
-  //   // console.log(story)
-  //   // saveFavStoryInLocalStorage(new Story(story))
-  // })
-  // console.log(localStorage.getItem('favorites'))
-  // // TODO: add this somewhere to save favorites to localstorage
-  // // saveFavStoriesInLocalStorage(result.favorites)
-  // // console.log(...localStorage.getItem('favorites'))
 }
 
 /** Check and update fa-icon class, then return POST or DELETE.
@@ -160,9 +152,6 @@ function saveFavStoryInLocalStorage(fav) {
   console.debug('saveFavStoryInLocalStorage')
   if (currentUser) {
     localStorage.setItem('favorites', fav)
-    // localStorage.getItem(...'favorites').forEach((story) => {
-    //   console.log(story.storyId)
-    // })
   }
 }
 
