@@ -206,14 +206,23 @@ function generateFavStoryMarkup(story) {
 
 function putFavStoriesOnPage() {
   console.debug('putFavStoriesOnPage')
-
+  let favStories = favStoriesList()
   $allStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
-  for (let story of storyList.stories) {
-    const $story = generateStoryMarkup(story)
+  for (let story of favStories) {
+    const $story = generateFavStoryMarkup(story)
     $allStoriesList.append($story)
   }
 
   $allStoriesList.show()
+}
+
+/** Get and show stories when site first loads. */
+
+async function getAndShowFavStories() {
+  storyList = await StoryList.getStories()
+  $storiesLoadingMsg.remove()
+
+  putStoriesOnPage()
 }
