@@ -2,7 +2,7 @@
 
 // This is the global list of the stories, an instance of StoryList
 let storyList
-
+let updateFavStoryList
 /** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
@@ -56,7 +56,10 @@ function putStoriesOnPage() {
 
 function putStoriesOnPageAfterLogin() {
   console.debug('putStoriesOnPage')
-  let favStories = favStoriesList()
+  let favStories = getFavStoriesList(
+    storyList.stories,
+    !updateFavStoryList ? currentUser.favorites : updateFavStoryList,
+  )
   $allStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
@@ -128,7 +131,14 @@ async function toggleFavoriteStories(evt) {
     liStoryId,
     currentUser.loginToken,
   )
+
+  let { favorites } = result
+
+  updateFavStoryList = faves(favorites)
 }
+
+// turn favorites list into array of stories
+let faves = (favList) => favList.map((fav) => new Story(fav))
 
 /** Check and update fa-icon class, then return POST or DELETE.
  */
@@ -157,10 +167,6 @@ function saveFavStoryInLocalStorage(fav) {
   }
 }
 
-const story = document
-  .getElementById('all-stories-list')
-  .addEventListener('click', toggleFavoriteStories)
-
 /**
  * A render method to render HTML for an individual Story instance
  * - story: an instance of Story
@@ -169,9 +175,9 @@ const story = document
  */
 
 // Get list of favorite stories from filtering storyList and favorites
-let favStoriesList = () =>
-  storyList.stories.filter((story1) =>
-    currentUser.favorites.some((story2) => story1.storyId === story2.storyId),
+let getFavStoriesList = (storyArr1, storyArr2) =>
+  storyArr1.filter((story1) =>
+    storyArr2.some((story2) => story1.storyId === story2.storyId),
   )
 
 function generateFavStoryMarkup(story) {
@@ -197,10 +203,10 @@ function generateFavStoryMarkup(story) {
 
 function putFavStoriesOnPage() {
   console.debug('putFavStoriesOnPage')
-  let favStories = favStoriesList()
-  // $allStoriesList.empty()
+  let favStories = !updateFavStoryList
+    ? getFavStoriesList(storyList.stories, currentUser.favorites)
+    : updateFavStoryList
   $favStoriesList.empty()
-
   // loop through all of our stories and generate HTML for them
   for (let story of favStories) {
     const $story = generateFavStoryMarkup(story)
@@ -272,3 +278,8 @@ async function deleteUsersStory(evt) {
   // Reloads User's own stories
   putUsersStoriesOnPage()
 }
+
+const storyLists = [$allStoriesList, $favStoriesList, $usersStoriesList]
+storyLists.forEach((list) => {
+  list.on('click', toggleFavoriteStories)
+})

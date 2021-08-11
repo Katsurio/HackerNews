@@ -235,6 +235,7 @@ class User {
         `%c ${message}`,
         'color: springgreen; background-color: indigo',
       )
+      console.log(user)
       return user
     } catch (err) {
       console.error('addUserFavStory', err)
