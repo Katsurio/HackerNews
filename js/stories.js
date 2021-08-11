@@ -243,7 +243,6 @@ function generateUsersStoryMarkup(story) {
 function putUsersStoriesOnPage() {
   console.debug('putUsersStoriesOnPage')
   let usersStories = currentUser.ownStories
-  // $allStoriesList.empty()
   $usersStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
@@ -266,6 +265,7 @@ async function deleteUsersStory(evt) {
   evt.preventDefault
   const targetTagName = evt.target.tagName
   const targetHasClassFaTrash = evt.target.classList.contains('fa-trash-alt')
+  const parent = evt.target.parentElement.parentElement
 
   // Check if not icon or doesn't have fa-star class
   if (targetTagName !== 'I' || !targetHasClassFaTrash) return
@@ -273,7 +273,9 @@ async function deleteUsersStory(evt) {
   const liStoryId = evt.target.parentElement.parentElement.id
 
   // Deletes Story
-  const result = await StoryList.deleteUsersStory(currentUser, liStoryId)
+  const result = await storyList
+    .deleteUserStory(currentUser, liStoryId)
+    .then(parent.remove())
 
   // Reloads User's own stories
   putUsersStoriesOnPage()
@@ -283,3 +285,5 @@ const storyLists = [$allStoriesList, $favStoriesList, $usersStoriesList]
 storyLists.forEach((list) => {
   list.on('click', toggleFavoriteStories)
 })
+
+$usersStoriesList.on('click', deleteUsersStory)
