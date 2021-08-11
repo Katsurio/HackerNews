@@ -212,7 +212,11 @@ class User {
         data: { token: userToken },
       })
 
-      let { user } = response.data
+      let { user, message } = response.data
+      console.log(
+        `%c ${message}`,
+        'color: springgreen; background-color: indigo',
+      )
       return user
     } catch (err) {
       console.error('addUserFavStory', err)

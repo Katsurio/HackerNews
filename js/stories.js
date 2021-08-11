@@ -25,6 +25,9 @@ function generateStoryMarkup(story) {
   const hostName = story.getHostName()
   return $(`
       <li id="${story.storyId}">
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -45,6 +48,24 @@ function putStoriesOnPage() {
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
     const $story = generateStoryMarkup(story)
+    $allStoriesList.append($story)
+  }
+
+  $allStoriesList.show()
+}
+
+function putStoriesOnPageAfterLogin() {
+  console.debug('putStoriesOnPage')
+  let favStories = favStoriesList()
+  $allStoriesList.empty()
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of storyList.stories) {
+    // Check if story is in favStories to show fav story icon
+    const $story =
+      $.inArray(story, favStories) === -1
+        ? generateStoryMarkup(story)
+        : generateFavStoryMarkup(story)
     $allStoriesList.append($story)
   }
 
@@ -90,35 +111,35 @@ addStoryForm.addEventListener('submit', submitStoryForm)
  * - shows a nav link to their favorited stories
  */
 async function toggleFavoriteStories(evt) {
+  // debugger
   evt.preventDefault
-  const favStoryId = evt.target.id
-  const token = currentUser.loginToken
-  // Check if story is favorited, return POST or DELETE
-  const postOrDelete = checkFavoriteClass(evt.target)
-  console.log(postOrDelete)
+  const clickedEleTagName = evt.target.tagName
+  if (clickedEleTagName !== 'I') return
+
+  const liStoryId = evt.target.parentElement.parentElement.id
+  // Check and update fa-icon class, then return POST or DELETE
+  const postOrDelete = checkFontIconClass(evt.target)
   // If not favorited, POST/save; else, DELETE
   const result = await User.toggleUserFavStory(
     postOrDelete,
     currentUser.username,
-    favStoryId,
-    token,
+    liStoryId,
+    currentUser.loginToken,
   )
-
-  console.log(result)
-  console.log(currentUser.favorites)
 }
-const storyToFavorite = document.getElementById('all-stories-list')
-storyToFavorite.addEventListener('click', toggleFavoriteStories)
 
-function checkFavoriteClass(element) {
-  if (!element.classList.contains('favorite')) {
-    element.classList.add('favorite')
+/** Check and update fa-icon class, then return POST or DELETE.
+ */
+function checkFontIconClass(element) {
+  if (!element.classList.contains('fas')) {
+    element.classList.remove('far')
+    element.classList.add('fas')
     return 'POST'
   } else {
-    element.classList.remove('favorite')
+    element.classList.remove('fas')
+    element.classList.add('far')
     return 'DELETE'
   }
-  saveFavStoriesInLocalStorage()
 }
 
 /** Sync current user's favortie stories to localStorage.
@@ -127,9 +148,61 @@ function checkFavoriteClass(element) {
  * (or the user revisits the site later), they will still see them.
  */
 
-function saveFavStoriesInLocalStorage() {
-  console.debug('saveFavStoriesInLocalStorage')
+function saveFavStoryInLocalStorage(fav) {
+  console.debug('saveFavStoryInLocalStorage')
   if (currentUser) {
-    localStorage.setItem('favorites', currentUser.user.favorites)
+    localStorage.setItem('favorites', fav)
   }
+}
+
+const story = document
+  .getElementById('all-stories-list')
+  .addEventListener('click', toggleFavoriteStories)
+
+/**
+ * A render method to render HTML for an individual Story instance
+ * - story: an instance of Story
+ *
+ * Returns the markup for the story.
+ */
+
+// Get list of favorite stories from filtering storyList and favorites
+let favStoriesList = () =>
+  storyList.stories.filter((story1) =>
+    currentUser.favorites.some((story2) => story1.storyId === story2.storyId),
+  )
+
+function generateFavStoryMarkup(story) {
+  console.debug('generateFavStoryMarkup', story)
+
+  const hostName = story.getHostName()
+  return $(`
+      <li id="${story.storyId}">
+        <span class="star">
+          <i class="fas fa-star"></i>
+        </span>
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+      </li>
+    `)
+}
+
+/** Gets list of stories from server, generates their HTML, and puts on page. */
+
+function putFavStoriesOnPage() {
+  console.debug('putFavStoriesOnPage')
+  let favStories = favStoriesList()
+  $allStoriesList.empty()
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of favStories) {
+    const $story = generateFavStoryMarkup(story)
+    $allStoriesList.append($story)
+  }
+
+  $allStoriesList.show()
 }

@@ -9,8 +9,7 @@
 function navAllStories(evt) {
   console.debug('navAllStories', evt)
   hidePageComponents()
-  putStoriesOnPage()
-  const addStoryForm = document.getElementById('add-story-form')
+  currentUser ? putStoriesOnPageAfterLogin() : putStoriesOnPage()
   addStoryForm.classList.add('hidden')
 }
 
@@ -37,14 +36,12 @@ function updateNavOnLogin() {
   $loginForm.hide()
   $signupForm.hide()
   $navUserProfile.text(`${currentUser.username}`).show()
-  const navSubmitStory = document.getElementById('nav-submit-story')
-  const addStoryForm = document.getElementById('add-story-form')
   navSubmitStory.classList.remove('hidden')
   addStoryForm.classList.add('hidden')
+  navFavorites.classList.remove('hidden')
 }
 
 /** Show add story form on click "submit". */
-
 function navSubmitClick(evt) {
   console.debug('navSubmitClick')
   hidePageComponents()
@@ -53,3 +50,11 @@ function navSubmitClick(evt) {
   addStoryForm.classList.remove('hidden')
 }
 navSubmitStory.addEventListener('click', navSubmitClick)
+
+/** Show favorites stories on click on favorites. */
+function navFavoritesClick(evt) {
+  console.debug('navSubmitFavoritesClick')
+  hidePageComponents()
+  putFavStoriesOnPage()
+}
+navFavorites.addEventListener('click', navFavoritesClick)
