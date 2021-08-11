@@ -53,7 +53,9 @@ navSubmitStory.addEventListener('click', navSubmitClick)
 function navFavoritesClick(evt) {
   console.debug('navSubmitFavoritesClick')
   hidePageComponents()
+  $favStoriesList.show()
   putFavStoriesOnPage()
+  addStoryForm.classList.add('hidden')
 }
 navFavorites.addEventListener('click', navFavoritesClick)
 
@@ -62,6 +64,8 @@ function navMyStoriesClick(evt) {
   console.log(currentUser)
   console.debug('navMyStoriesClick')
   hidePageComponents()
+  $usersStoriesList.show()
   putUsersStoriesOnPage()
+  addStoryForm.classList.add('hidden')
 }
 navMyStories.addEventListener('click', navMyStoriesClick)

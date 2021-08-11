@@ -198,15 +198,16 @@ function generateFavStoryMarkup(story) {
 function putFavStoriesOnPage() {
   console.debug('putFavStoriesOnPage')
   let favStories = favStoriesList()
-  $allStoriesList.empty()
+  // $allStoriesList.empty()
+  $favStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
   for (let story of favStories) {
     const $story = generateFavStoryMarkup(story)
-    $allStoriesList.append($story)
+    $favStoriesList.append($story)
   }
 
-  $allStoriesList.show()
+  $favStoriesList.show()
 }
 
 function generateUsersStoryMarkup(story) {
@@ -236,13 +237,38 @@ function generateUsersStoryMarkup(story) {
 function putUsersStoriesOnPage() {
   console.debug('putUsersStoriesOnPage')
   let usersStories = currentUser.ownStories
-  $allStoriesList.empty()
+  // $allStoriesList.empty()
+  $usersStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
   for (let story of usersStories) {
     const $story = generateUsersStoryMarkup(story)
-    $allStoriesList.append($story)
+    $usersStoriesList.append($story)
   }
 
-  $allStoriesList.show()
+  $usersStoriesList.show()
+}
+
+/** When a user clicks trash icon on own story, it deletes the story:
+ *
+ * - saves the story to a list of favorite stories
+ * - saves the list of favorite stories to local storage for page refreshes
+ * - allows logged in users to see a separate list of favorited stories
+ * - shows a nav link to their favorited stories
+ */
+async function deleteUsersStory(evt) {
+  evt.preventDefault
+  const targetTagName = evt.target.tagName
+  const targetHasClassFaTrash = evt.target.classList.contains('fa-trash-alt')
+
+  // Check if not icon or doesn't have fa-star class
+  if (targetTagName !== 'I' || !targetHasClassFaTrash) return
+
+  const liStoryId = evt.target.parentElement.parentElement.id
+
+  // Deletes Story
+  const result = await StoryList.deleteUsersStory(currentUser, liStoryId)
+
+  // Reloads User's own stories
+  putUsersStoriesOnPage()
 }
