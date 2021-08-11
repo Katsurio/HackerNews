@@ -49,7 +49,31 @@
         <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
       </div>
     </nav>
-
+    <section class="add-story-container container">
+      <!-- Add Story form -->
+      <form
+        action="#"
+        id="add-story-form"
+        class="add-story-form hidden"
+        method="post"
+      >
+        <h4>Add Story</h4>
+        <div class="title-input">
+          <label for="add-story-title">title</label>
+          <input id="add-story-title" autocapitalize="words" />
+        </div>
+        <div class="title-author">
+          <label for="add-story-author">author</label>
+          <input id="add-story-author" autocapitalize="words" />
+        </div>
+        <div class="login-input">
+          <label for="add-story-url">url</label>
+          <input id="add-story-url" type="url" />
+        </div>
+        <button type="submit">Submit</button>
+        <hr>
+      </form>
+    </section>
     <!-- area for stories (all stories, user stories, favorites) -->
     <section class="stories-container container">
       <!-- loading message (removed by JS after stories loaded) -->
@@ -110,29 +134,6 @@
           />
         </div>
         <button type="submit">create account</button>
-      </form>
-
-      <!-- Add Story form -->
-      <form
-        action="#"
-        id="add-story-form"
-        class="add-story-form hidden"
-        method="post"
-      >
-        <h4>Add Story</h4>
-        <div class="title-input">
-          <label for="add-story-title">title</label>
-          <input id="add-story-title" autocapitalize="words" />
-        </div>
-        <div class="title-author">
-          <label for="add-story-author">author</label>
-          <input id="add-story-author" autocapitalize="words" />
-        </div>
-        <div class="login-input">
-          <label for="add-story-url">url</label>
-          <input id="add-story-url" type="url" />
-        </div>
-        <button type="submit">Add Story</button>
       </form>
     </section>
 
