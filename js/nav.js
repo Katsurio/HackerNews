@@ -56,3 +56,12 @@ function navFavoritesClick(evt) {
   putFavStoriesOnPage()
 }
 navFavorites.addEventListener('click', navFavoritesClick)
+
+/** Show user's stories on click "My Stories". */
+function navMyStoriesClick(evt) {
+  console.log(currentUser)
+  console.debug('navMyStoriesClick')
+  hidePageComponents()
+  putUsersStoriesOnPage()
+}
+navMyStories.addEventListener('click', navMyStoriesClick)

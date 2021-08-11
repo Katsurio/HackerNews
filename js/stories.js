@@ -61,7 +61,7 @@ function putStoriesOnPageAfterLogin() {
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
-    // Check if story is in favStories to show fav story icon
+    // Check if story is in favStories to show fav story icon highlighted
     const $story =
       $.inArray(story, favStories) === -1
         ? generateStoryMarkup(story)
@@ -111,10 +111,12 @@ addStoryForm.addEventListener('submit', submitStoryForm)
  * - shows a nav link to their favorited stories
  */
 async function toggleFavoriteStories(evt) {
-  // debugger
   evt.preventDefault
-  const clickedEleTagName = evt.target.tagName
-  if (clickedEleTagName !== 'I') return
+  const targetTagName = evt.target.tagName
+  const targetHasClassFaStar = evt.target.classList.contains('fa-star')
+
+  // Check if not icon or doesn't have fa-star class
+  if (targetTagName !== 'I' || !targetHasClassFaStar) return
 
   const liStoryId = evt.target.parentElement.parentElement.id
   // Check and update fa-icon class, then return POST or DELETE
@@ -201,6 +203,44 @@ function putFavStoriesOnPage() {
   // loop through all of our stories and generate HTML for them
   for (let story of favStories) {
     const $story = generateFavStoryMarkup(story)
+    $allStoriesList.append($story)
+  }
+
+  $allStoriesList.show()
+}
+
+function generateUsersStoryMarkup(story) {
+  console.debug('generateFavStoryMarkup', story)
+
+  const hostName = story.getHostName()
+  return $(`
+      <li id="${story.storyId}">
+        <span class="trash">
+        <i class="fas fa-trash-alt"></i>
+        </span>
+        <span class="star">
+          <i class="far fa-star"></i>
+        </span>
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+      </li>
+    `)
+}
+
+/** Gets list of stories from server, generates their HTML, and puts on page. */
+
+function putUsersStoriesOnPage() {
+  console.debug('putUsersStoriesOnPage')
+  let usersStories = currentUser.ownStories
+  $allStoriesList.empty()
+
+  // loop through all of our stories and generate HTML for them
+  for (let story of usersStories) {
+    const $story = generateUsersStoryMarkup(story)
     $allStoriesList.append($story)
   }
 
