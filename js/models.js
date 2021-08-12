@@ -23,7 +23,6 @@ class Story {
   /** Parses hostname out of URL and returns it. */
 
   getHostName() {
-    // UNIMPLEMENTED: complete this function!
     return window.location.hostname
   }
 }
@@ -72,7 +71,6 @@ class StoryList {
    */
 
   async addStory(user, { title, author, url }) {
-    // UNIMPLEMENTED: complete this function!
     const token = user.loginToken
 
     const response = await axios({
@@ -84,6 +82,24 @@ class StoryList {
     const newStory = new Story(response.data.story)
     this.stories.unshift(newStory)
     return newStory
+  }
+
+  /** Delete user's own created story
+   *
+   * - userToken: an current user
+   * - storyId: a story's id
+   */
+  async deleteUserStory(user, storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: 'DELETE',
+      data: { token: user.loginToken },
+    })
+
+    // const { message, story } = response.data
+    // console.log(message)
+    // console.log(story)
+    return response.data
   }
 }
 
@@ -217,6 +233,7 @@ class User {
         `%c ${message}`,
         'color: springgreen; background-color: indigo',
       )
+      console.log(user)
       return user
     } catch (err) {
       console.error('addUserFavStory', err)

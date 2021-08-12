@@ -22,25 +22,3 @@ nav {
   margin-left: auto;
   text-align: right;
 }
-
-/* .nav-div {
-  position: relative;
-  margin-right: 5px;
-}
-
-.nav-left:after {
-  content: '';
-  height: 75%;
-  width: 2px;
-  position: absolute;
-  left: 0;
-  top: 10%;
-  background-color: #000000;
-  margin-right: 30px;
-} */
-
-.nav-left:before {
-  content: '';
-  border-left: 2px solid black;
-  margin: 0 10px;
-}

@@ -36,12 +36,14 @@
       <div class="navbar-brand">
         <a class="nav-link" href="#" id="nav-all">Hack or Snooze</a>
       </div>
-        <a class="nav-link nav-left hidden" id="nav-submit-story" href="#">
-          Submit
-        </a>
-        <a class="nav-link nav-left hidden" id="nav-favorites" href="#">
-          Favorites
-        </a>
+      <div id="main-nav-links" class="main-nav-links hidden">
+        |
+        <a class="nav-link nav-left" id="nav-submit-story" href ="#">Submit</a>
+        |
+        <a class="nav-link nav-left" id="nav-favorites" href="#">Favorites</a>
+        |
+        <a class="nav-link nav-left" id="nav-my-stories" href="#">My Stories</a>
+      </div>
       </div>
       <div class="nav-right">
         <a class="nav-link" href="#" id="nav-login">login/signup</a>
@@ -49,7 +51,31 @@
         <a class="hidden" id="nav-logout" href="#"><small>(logout)</small></a>
       </div>
     </nav>
-
+    <section class="add-story-container container">
+      <!-- Add Story form -->
+      <form
+        action="#"
+        id="add-story-form"
+        class="add-story-form hidden"
+        method="post"
+      >
+        <h4>Add Story</h4>
+        <div class="title-input">
+          <label for="add-story-title">title</label>
+          <input id="add-story-title" autocapitalize="words" />
+        </div>
+        <div class="title-author">
+          <label for="add-story-author">author</label>
+          <input id="add-story-author" autocapitalize="words" />
+        </div>
+        <div class="login-input">
+          <label for="add-story-url">url</label>
+          <input id="add-story-url" type="url" />
+        </div>
+        <button type="submit">Submit</button>
+        <hr>
+      </form>
+    </section>
     <!-- area for stories (all stories, user stories, favorites) -->
     <section class="stories-container container">
       <!-- loading message (removed by JS after stories loaded) -->
@@ -57,6 +83,12 @@
 
       <!-- List of all stories -->
       <ol id="all-stories-list" class="stories-list"></ol>
+
+      <!-- List of favorite stories -->
+      <ol id="fav-stories-list" class="stories-list hidden"></ol>
+
+      <!-- List of user's stories -->
+      <ol id="users-stories-list" class="stories-list hidden"></ol>
     </section>
 
     <!-- Login and signup forms -->
@@ -110,29 +142,6 @@
           />
         </div>
         <button type="submit">create account</button>
-      </form>
-
-      <!-- Add Story form -->
-      <form
-        action="#"
-        id="add-story-form"
-        class="add-story-form hidden"
-        method="post"
-      >
-        <h4>Add Story</h4>
-        <div class="title-input">
-          <label for="add-story-title">title</label>
-          <input id="add-story-title" autocapitalize="words" />
-        </div>
-        <div class="title-author">
-          <label for="add-story-author">author</label>
-          <input id="add-story-author" autocapitalize="words" />
-        </div>
-        <div class="login-input">
-          <label for="add-story-url">url</label>
-          <input id="add-story-url" type="url" />
-        </div>
-        <button type="submit">Add Story</button>
       </form>
     </section>
 
