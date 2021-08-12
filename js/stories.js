@@ -3,6 +3,7 @@
 // This is the global list of the stories, an instance of StoryList
 let storyList
 let updateFavStoryList
+let updatedOwnStoryList
 /** Get and show stories when site first loads. */
 
 async function getAndShowStoriesOnStart() {
@@ -92,15 +93,19 @@ async function submitStoryForm(evt) {
     url,
     username,
   })
-
   const $newStory = generateStoryMarkup(newStory)
 
   $allStoriesList.prepend($newStory)
 
+  // Assign updatedOwnStoryList to currentUser.ownStories to push the new story
+  // so that the updatedOwnStoryList will show the new story after we push it onto the array;
+  // otherwise, new stories won't show on "My Stories" nav click until the page reload
+  updatedOwnStoryList = currentUser.ownStories
+  updatedOwnStoryList.push(newStory)
+
   addStoryForm.classList.add('hidden')
   addStoryForm.reset()
 }
-addStoryForm.addEventListener('submit', submitStoryForm)
 
 /******************************************************************************
  * Favoriting stories for logged in users
@@ -240,9 +245,9 @@ function generateUsersStoryMarkup(story) {
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
-function putUsersStoriesOnPage() {
+function putUsersStoriesOnPage(usersStories) {
   console.debug('putUsersStoriesOnPage')
-  let usersStories = currentUser.ownStories
+  // let usersStories = currentUser.ownStories
   $usersStoriesList.empty()
 
   // loop through all of our stories and generate HTML for them
@@ -277,9 +282,25 @@ async function deleteUsersStory(evt) {
     .deleteUserStory(currentUser, liStoryId)
     .then(parent.remove())
 
-  // Reloads User's own stories
-  putUsersStoriesOnPage()
+  // Filter out deleted story, and return new own stories list
+  updatedOwnStoryList = filterStories(updatedOwnStoryList, liStoryId)
+
+  // Reloads User's own stories with the deleted story removed
+  putUsersStoriesOnPage(updatedOwnStoryList)
 }
+
+// Check to see if users stories has been updated with a value;
+//otherwise, return currentUser.ownStories
+function checkOwnStories(updatedList, usersList) {
+  return updatedList !== undefined ? updatedList : usersList
+}
+
+// Filter out deleted story and return new array
+const filterStories = (ownStoriesList, storyId) =>
+  ownStoriesList.filter((story) => story.storyId !== storyId)
+
+// Event Listeners
+addStoryForm.addEventListener('submit', submitStoryForm)
 
 const storyLists = [$allStoriesList, $favStoriesList, $usersStoriesList]
 storyLists.forEach((list) => {

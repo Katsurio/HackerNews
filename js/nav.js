@@ -64,7 +64,9 @@ function navMyStoriesClick(evt) {
   console.debug('navMyStoriesClick')
   hidePageComponents()
   $usersStoriesList.show()
-  putUsersStoriesOnPage()
+  putUsersStoriesOnPage(
+    checkOwnStories(updatedOwnStoryList, currentUser.ownStories),
+  )
   addStoryForm.classList.add('hidden')
 }
 navMyStories.addEventListener('click', navMyStoriesClick)
